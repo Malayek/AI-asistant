@@ -1,105 +1,115 @@
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Assistant Clone</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-    }
-    .chat-container {
-      max-width: 700px;
-      margin: 40px auto;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      padding: 20px;
-    }
-    .chat-box {
-      height: 350px;
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    .user {
-      text-align: right;
-      color: #1a73e8;
-      margin: 8px 0;
-    }
-    .bot {
-      text-align: left;
-      color: #0b8043;
-      margin: 8px 0;
-    }
-    input {
-      width: 80%;
-      padding: 10px;
-      font-size: 14px;
-    }
-    button {
-      padding: 10px 15px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Selen AI – Multilingual Assistant</title>
+<style>
+  body { margin:0; font-family: Arial, sans-serif; background:#f5f5f5; }
+  .app { height:100vh; display:flex; flex-direction:column; }
+  .header { background:#0b5cff; color:white; padding:15px; font-size:20px; }
+  .chat { flex:1; overflow-y:auto; padding:15px; }
+  .user { text-align:right; margin:10px; color:#0b5cff; }
+  .ai { text-align:left; margin:10px; color:#0b8043; }
+  .input { display:flex; padding:10px; background:white; }
+  input { flex:1; padding:10px; font-size:16px; }
+  button { margin-left:5px; font-size:16px; padding:10px; cursor:pointer; }
+</style>
 </head>
+
 <body>
-
-<div class="chat-container">
-  <h2>AI Assistant (Educational Clone)</h2>
-  <div class="chat-box" id="chatBox"></div>
-
-  <input type="text" id="userInput" placeholder="Ask me something...">
-  <button onclick="sendMessage()">Send</button>
+<div class="app">
+  <div class="header">🌍 Selen AI – Multilingual Assistant</div>
+  <div class="chat" id="chat"></div>
+  <div class="input">
+    <input id="text" placeholder="Use the microphone 🎤" />
+    <button onclick="speak()">🎤</button>
+    <button onclick="send()">Send</button>
+  </div>
 </div>
 
 <script>
-  function sendMessage() {
-    const input = document.getElementById("userInput");
-    const chatBox = document.getElementById("chatBox");
-    const message = input.value.toLowerCase();
+const chat = document.getElementById("chat");
 
-    if (message.trim() === "") return;
+function add(role, text) {
+  chat.innerHTML += `<div class="${role}"><b>${role==='user'?'You':'AI'}:</b> ${text}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
 
-    // Show user message
-    chatBox.innerHTML += `<div class="user"><strong>You:</strong> ${input.value}</div>`;
+function send() {
+  const input = document.getElementById("text");
+  const msg = input.value.trim();
+  if(!msg) return;
+  add("user", msg);
+  input.value="";
+  respond(msg.toLowerCase());
+}
 
-    let response = "I am still learning. Can you ask something else?";
+function respond(t) {
+  let r="";
 
-    // AI LOGIC (RULE-BASED)
-    if (message.includes("hello") || message.includes("hi")) {
-      response = "Hello! I am an AI assistant created for learning purposes.";
-    } 
-    else if (message.includes("what is ai")) {
-      response = "AI stands for Artificial Intelligence. It is a field of computer science where machines are designed to think, learn, and make decisions like humans.";
-    }
-    else if (message.includes("what is chatgpt")) {
-      response = "ChatGPT is an AI language model that understands text and generates human-like responses using patterns learned from data.";
-    }
-    else if (message.includes("who made you")) {
-      response = "I am a demo AI assistant created by a student as an educational project.";
-    }
-    else if (message.includes("help")) {
-      response = "I can answer basic questions about AI, technology, and this project.";
-    }
-    else if (message.includes("project")) {
-      response = "This project demonstrates a basic AI chatbot using rule-based logic and a web interface.";
-    }
-    else if (message.includes("time")) {
-      response = "I cannot access real-time data, but I can explain how AI systems work.";
-    }
+  // Multilingual greetings
+  if(t.includes("hello") || t.includes("hi")) r="Hello Selen 😊 How can I help?";
+  else if(t.includes("english")) r="Hello! How are you?";
+  else if(t.includes("korean")) r="안녕하세요! 😊 어떻게 지내세요?";
+  else if(t.includes("urdu")) r="سلام 😊 میں آپ کی مدد کے لیے حاضر ہوں";
+  else if(t.includes("arabic")) r="مرحبا 😊 كيف حالك؟";
+  else if(t.includes("chinese")) r="你好 😊 你今天怎么样？";
+  else if(t.includes("japanese")) r="こんにちは 😊 お元気ですか？";
+  else if(t.includes("french")) r="Bonjour 😊 Comment ça va ?";
+  else if(t.includes("russian")) r="Привет 😊 Как дела?";
 
-    // Show AI response
-    chatBox.innerHTML += `<div class="bot"><strong>AI:</strong> ${response}</div>`;
-
-    input.value = "";
-    chatBox.scrollTop = chatBox.scrollHeight;
+  // Math
+  else if(t.match(/\d+/)) {
+    try {
+      const exp = t.replace(/[^0-9+\-*/().]/g,"");
+      r = "🧮 The answer is: "+eval(exp);
+    } catch { r="Tell me the math clearly and I’ll solve it 😊"; }
   }
-</script>
 
+  // Study
+  else if(t.includes("study")||t.includes("learn")) {
+    r="📘 Let’s learn together. Tell me the subject and level.";
+  }
+
+  // Business
+  else if(t.includes("business")) {
+    r="💼 I’ll respond professionally. What business help do you need?";
+  }
+
+  // Kids mode
+  else if(t.includes("kid")||t.includes("child")) {
+    r="👶 Hi there! Learning is fun! Ask me anything 🌈";
+  }
+
+  // Emotional support
+  else if(t.includes("sad")||t.includes("depressed")||t.includes("tired")) {
+    r="💙 I’m glad you told me. You matter. Take a breath 🌱";
+  }
+
+  // Advice
+  else if(t.includes("advice")) {
+    r="🌱 Break problems into steps, be kind to yourself, and ask for help when needed.";
+  }
+
+  // Default
+  else r="✨ Tell me more, and I’ll respond in the best way I can.";
+
+  add("ai",r);
+}
+
+// Microphone input
+function speak() {
+  if(!('webkitSpeechRecognition' in window)){
+    alert("Speech recognition works in Chrome only.");
+    return;
+  }
+  const rec = new webkitSpeechRecognition();
+  rec.lang="en-US";
+  rec.onresult=e=>{
+    document.getElementById("text").value=e.results[0][0].transcript;
+  };
+  rec.start();
+}
+</script>
 </body>
 </html>
