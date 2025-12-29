@@ -1,0 +1,105 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Assistant Clone</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    .chat-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .chat-box {
+      height: 350px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .user {
+      text-align: right;
+      color: #1a73e8;
+      margin: 8px 0;
+    }
+    .bot {
+      text-align: left;
+      color: #0b8043;
+      margin: 8px 0;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <h2>AI Assistant (Educational Clone)</h2>
+  <div class="chat-box" id="chatBox"></div>
+
+  <input type="text" id="userInput" placeholder="Ask me something...">
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+  function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chatBox = document.getElementById("chatBox");
+    const message = input.value.toLowerCase();
+
+    if (message.trim() === "") return;
+
+    // Show user message
+    chatBox.innerHTML += `<div class="user"><strong>You:</strong> ${input.value}</div>`;
+
+    let response = "I am still learning. Can you ask something else?";
+
+    // AI LOGIC (RULE-BASED)
+    if (message.includes("hello") || message.includes("hi")) {
+      response = "Hello! I am an AI assistant created for learning purposes.";
+    } 
+    else if (message.includes("what is ai")) {
+      response = "AI stands for Artificial Intelligence. It is a field of computer science where machines are designed to think, learn, and make decisions like humans.";
+    }
+    else if (message.includes("what is chatgpt")) {
+      response = "ChatGPT is an AI language model that understands text and generates human-like responses using patterns learned from data.";
+    }
+    else if (message.includes("who made you")) {
+      response = "I am a demo AI assistant created by a student as an educational project.";
+    }
+    else if (message.includes("help")) {
+      response = "I can answer basic questions about AI, technology, and this project.";
+    }
+    else if (message.includes("project")) {
+      response = "This project demonstrates a basic AI chatbot using rule-based logic and a web interface.";
+    }
+    else if (message.includes("time")) {
+      response = "I cannot access real-time data, but I can explain how AI systems work.";
+    }
+
+    // Show AI response
+    chatBox.innerHTML += `<div class="bot"><strong>AI:</strong> ${response}</div>`;
+
+    input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+</script>
+
+</body>
+</html>
